@@ -1,0 +1,23 @@
+{
+  "name": "claude-plan-export-dev",
+  "metadata": {
+    "description": "Development marketplace for claude plan export plugin",
+    "version": "1.0.0"
+  },
+  "owner": {
+    "name": "J Liew",
+    "email": "jliew@420024lab.com"
+  },
+  "plugins": [
+    {
+      "name": "plan-export",
+      "description": "Auto-save your Claude Code plans to the project root when you finish planning.",
+      "version": "0.0.0",
+      "source": "./",
+      "author": {
+        "name": "J Liew",
+        "email": "jliew@420024lab.com"
+      }
+    }
+  ]
+}
