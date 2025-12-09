@@ -1,6 +1,6 @@
 {
   "name": "plan-export",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Auto-save your Claude Code plans to the project root when you finish planning.",
   "author": {
     "name": "J Liew",
@@ -9,5 +9,11 @@
   "homepage": "https://github.com/kenryu42/claude-code-plan-export",
   "repository": "https://github.com/kenryu42/claude-code-plan-export.git",
   "license": "MIT",
-  "keywords": ["claude", "claude-code", "plan-mode", "plan-export", "plugin"]
+  "keywords": [
+    "claude",
+    "claude-code",
+    "plan-mode",
+    "plan-export",
+    "plugin"
+  ]
 }
