@@ -40,8 +40,10 @@ This scans all session transcripts and exports any associated plan files.
 
 ## How It Works
 
-1. **SessionStart** - Captures the transcript path for later use
-2. **SessionEnd** - Reads the transcript, finds the plan `slug`, copies `~/.claude/plans/{slug}.md` to `plan-{slug}.md`
+1. Plan with Opus or any model in Plan Mode as usual
+2. When it asks you to choose auto-accept or manual approval, press **Esc**
+3. Start a new session (`/clear`, `/reset`, or `/new`)
+4. Your plan is automatically exported to your current working directory as `plan-{original_uid}.md`
 
 ## Project Structure
 
