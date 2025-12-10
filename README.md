@@ -13,13 +13,13 @@ Auto-save your Claude Code plans to the project root when you finish planning.
 Add the marketplace to Claude Code:
 
 ```
-/plugin marketplace add kenryu42/claude-marketplace
+/plugin marketplace add kenryu42/cc-marketplace
 ```
 
 Install the plugin:
 
 ```
-/plugin install plan-export@claude-marketplace
+/plugin install plan-export@cc-marketplace
 ```
 
 ## Usage
