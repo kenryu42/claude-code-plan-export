@@ -1,3 +1,12 @@
+# Changelog
+
+## [0.1.1](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.0...v0.1.1) (2025-12-12)
+
+
+### Features
+
+* add timestamped plan export command ([0ff110b](https://github.com/kenryu42/claude-code-plan-export/commit/0ff110b6049cb48b688f0a8d23436b90beee7609))
+
 ## 0.1.0 (2025-12-09)
 
 ### Features
