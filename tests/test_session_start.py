@@ -23,7 +23,9 @@ class SessionStartTests(TempDirTestCase):
         transcript = self.tmpdir / "transcript.jsonl"
         input_data = {"transcript_path": str(transcript)}
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("sys.stdin", io.StringIO(json.dumps(input_data))):
                 result = session_start.main()
 
@@ -46,7 +48,9 @@ class SessionStartTests(TempDirTestCase):
     def test_invalid_json_input(self) -> None:
         env_file = self.tmpdir / "env.sh"
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("sys.stdin", io.StringIO("{invalid")):
                 result = session_start.main()
 
@@ -56,7 +60,9 @@ class SessionStartTests(TempDirTestCase):
     def test_missing_transcript_path_field(self) -> None:
         env_file = self.tmpdir / "env.sh"
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("sys.stdin", io.StringIO(json.dumps({}))):
                 result = session_start.main()
 
@@ -66,7 +72,9 @@ class SessionStartTests(TempDirTestCase):
     def test_empty_stdin_skips_write(self) -> None:
         env_file = self.tmpdir / "env.sh"
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("sys.stdin", io.StringIO("")):
                 result = session_start.main()
 
@@ -76,8 +84,12 @@ class SessionStartTests(TempDirTestCase):
     def test_non_string_transcript_path_raises_type_error(self) -> None:
         env_file = self.tmpdir / "env.sh"
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
-            with mock.patch("sys.stdin", io.StringIO(json.dumps({"transcript_path": 12345}))):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
+            with mock.patch(
+                "sys.stdin", io.StringIO(json.dumps({"transcript_path": 12345}))
+            ):
                 # Code doesn't validate type - os.path.dirname expects str/bytes/PathLike
                 with self.assertRaises(TypeError):
                     session_start.main()
@@ -90,7 +102,9 @@ class SessionStartTests(TempDirTestCase):
         transcript = self.tmpdir / "transcript.jsonl"
         input_data = {"transcript_path": str(transcript)}
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("sys.stdin", io.StringIO(json.dumps(input_data))):
                 # Should raise an error when trying to write to non-existent directory
                 with self.assertRaises(FileNotFoundError):
@@ -99,4 +113,5 @@ class SessionStartTests(TempDirTestCase):
 
 if __name__ == "__main__":
     import unittest
+
     unittest.main()

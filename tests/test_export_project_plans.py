@@ -19,8 +19,12 @@ from tests import TempDirTestCase
 class FindSlugsTests(TempDirTestCase):
     def test_ignores_malformed_lines_but_keeps_valid_slugs(self) -> None:
         transcript = self.tmpdir / "t.jsonl"
-        transcript.write_text("not json\n" + json.dumps({"slug": "ok"}), encoding="utf-8")
-        self.assertEqual(export_project_plans.find_slugs_in_transcript(transcript), {"ok"})
+        transcript.write_text(
+            "not json\n" + json.dumps({"slug": "ok"}), encoding="utf-8"
+        )
+        self.assertEqual(
+            export_project_plans.find_slugs_in_transcript(transcript), {"ok"}
+        )
 
     def test_missing_transcript_file_returns_empty_set(self) -> None:
         transcript = self.tmpdir / "missing.jsonl"
@@ -29,11 +33,16 @@ class FindSlugsTests(TempDirTestCase):
 
     def test_collects_unique_slugs(self) -> None:
         transcript = self.tmpdir / "t.jsonl"
-        transcript.write_text("\n".join([
-            json.dumps({"slug": "one"}),
-            json.dumps({"slug": "one"}),
-            json.dumps({"slug": "two"}),
-        ]), encoding="utf-8")
+        transcript.write_text(
+            "\n".join(
+                [
+                    json.dumps({"slug": "one"}),
+                    json.dumps({"slug": "one"}),
+                    json.dumps({"slug": "two"}),
+                ]
+            ),
+            encoding="utf-8",
+        )
 
         slugs = export_project_plans.find_slugs_in_transcript(transcript)
         self.assertEqual(slugs, {"one", "two"})
@@ -47,7 +56,9 @@ class ExportProjectPlansMainTests(TempDirTestCase):
         self.assertEqual(result, 1)
 
     def test_invalid_transcript_directory(self) -> None:
-        with mock.patch.dict(os.environ, {"TRANSCRIPT_PATH": str(self.tmpdir / "missing")}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_PATH": str(self.tmpdir / "missing")}, clear=True
+        ):
             result = export_project_plans.main()
 
         self.assertEqual(result, 1)
@@ -66,17 +77,24 @@ class ExportProjectPlansMainTests(TempDirTestCase):
         transcript_a = transcript_dir / "a.jsonl"
         transcript_b = transcript_dir / "agent-ignored.jsonl"
 
-        transcript_a.write_text("\n".join([
-            json.dumps({"slug": "one"}),
-            json.dumps({"slug": "two"}),
-        ]), encoding="utf-8")
+        transcript_a.write_text(
+            "\n".join(
+                [
+                    json.dumps({"slug": "one"}),
+                    json.dumps({"slug": "two"}),
+                ]
+            ),
+            encoding="utf-8",
+        )
 
         transcript_b.write_text(json.dumps({"slug": "ignored"}), encoding="utf-8")
 
         (plans_dir / "one.md").write_text("plan one", encoding="utf-8")
         (plans_dir / "two.md").write_text("plan two", encoding="utf-8")
 
-        with mock.patch.dict(os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+        ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                     result = export_project_plans.main()
@@ -98,9 +116,13 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
         transcript_dir = self.tmpdir / "transcripts"
         transcript_dir.mkdir()
-        (transcript_dir / "a.jsonl").write_text(json.dumps({"message": "none"}), encoding="utf-8")
+        (transcript_dir / "a.jsonl").write_text(
+            json.dumps({"message": "none"}), encoding="utf-8"
+        )
 
-        with mock.patch.dict(os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+        ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                     result = export_project_plans.main()
@@ -116,9 +138,13 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
         transcript_dir = self.tmpdir / "transcripts"
         transcript_dir.mkdir()
-        (transcript_dir / "a.jsonl").write_text(json.dumps({"slug": "missing"}), encoding="utf-8")
+        (transcript_dir / "a.jsonl").write_text(
+            json.dumps({"slug": "missing"}), encoding="utf-8"
+        )
 
-        with mock.patch.dict(os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+        ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                     result = export_project_plans.main()
@@ -150,7 +176,9 @@ class ExportProjectPlansMainTests(TempDirTestCase):
                 raise IOError("disk full")
             return original_copy2(src, dst)
 
-        with mock.patch.dict(os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+        ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                     with mock.patch("shutil.copy2", side_effect=mock_copy2):
@@ -166,4 +194,5 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
 if __name__ == "__main__":
     import unittest
+
     unittest.main()

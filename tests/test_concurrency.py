@@ -66,7 +66,9 @@ class ConcurrencyTests(TempDirTestCase):
                 start_barrier.wait()
                 session_start.main()
 
-        with mock.patch.dict(os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
+        ):
             with mock.patch("builtins.open", side_effect=slow_open):
                 threads = [threading.Thread(target=worker) for _ in range(2)]
                 for t in threads:
@@ -111,21 +113,28 @@ class ConcurrencyTests(TempDirTestCase):
 
         def worker(content: str):
             thread_local.content = content
-            with mock.patch("sys.stdin", io.StringIO(json.dumps({"transcript_path": str(transcript)}))):
+            with mock.patch(
+                "sys.stdin",
+                io.StringIO(json.dumps({"transcript_path": str(transcript)})),
+            ):
                 start_barrier.wait()
                 export_plan.main()
 
         with mock.patch("pathlib.Path.home", return_value=home_dir):
             with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                 with mock.patch("shutil.copy2", side_effect=slow_copy):
-                    threads = [threading.Thread(target=worker, args=(c,)) for c in contents]
+                    threads = [
+                        threading.Thread(target=worker, args=(c,)) for c in contents
+                    ]
                     for t in threads:
                         t.start()
                     for t in threads:
                         t.join()
 
         dest_file = project_dir / f"plan-{slug}.md"
-        dest_content = dest_file.read_text(encoding="utf-8") if dest_file.exists() else ""
+        dest_content = (
+            dest_file.read_text(encoding="utf-8") if dest_file.exists() else ""
+        )
         self.assertIn(dest_content, contents)
 
     def test_read_while_write_returns_slug(self) -> None:
@@ -190,4 +199,5 @@ class ConcurrencyTests(TempDirTestCase):
 
 if __name__ == "__main__":
     import unittest
+
     unittest.main()

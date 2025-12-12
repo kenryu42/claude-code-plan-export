@@ -68,7 +68,9 @@ def main() -> int:
         dest_file = Path.cwd() / f"plan-{slug}.md"
 
         if not source_file.exists():
-            print(f"Plan file not found for slug '{slug}': {source_file}", file=sys.stderr)
+            print(
+                f"Plan file not found for slug '{slug}': {source_file}", file=sys.stderr
+            )
             continue
 
         try:

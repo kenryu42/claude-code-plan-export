@@ -13,7 +13,9 @@ import time
 from pathlib import Path
 
 
-def find_slug_in_transcript(transcript_path: Path, *, retries: int = 5, delay: float = 0.05) -> str | None:
+def find_slug_in_transcript(
+    transcript_path: Path, *, retries: int = 5, delay: float = 0.05
+) -> str | None:
     """Scan transcript JSONL for the first object containing a 'slug' field.
 
     Retries to handle concurrent writes that may temporarily produce malformed lines.

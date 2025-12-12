@@ -19,10 +19,15 @@ from tests import TempDirTestCase
 class FindSlugTests(TempDirTestCase):
     def test_valid_jsonl_with_slug(self) -> None:
         transcript = self.tmpdir / "transcript.jsonl"
-        transcript.write_text("\n".join([
-            json.dumps({"message": "hello"}),
-            json.dumps({"slug": "abc123"}),
-        ]), encoding="utf-8")
+        transcript.write_text(
+            "\n".join(
+                [
+                    json.dumps({"message": "hello"}),
+                    json.dumps({"slug": "abc123"}),
+                ]
+            ),
+            encoding="utf-8",
+        )
 
         slug = export_plan.find_slug_in_transcript(transcript)
         self.assertEqual(slug, "abc123")
@@ -43,10 +48,15 @@ class FindSlugTests(TempDirTestCase):
 
     def test_malformed_lines_are_ignored(self) -> None:
         transcript = self.tmpdir / "transcript.jsonl"
-        transcript.write_text("\n".join([
-            "not json",
-            json.dumps({"slug": "good"}),
-        ]), encoding="utf-8")
+        transcript.write_text(
+            "\n".join(
+                [
+                    "not json",
+                    json.dumps({"slug": "good"}),
+                ]
+            ),
+            encoding="utf-8",
+        )
 
         slug = export_plan.find_slug_in_transcript(transcript)
         self.assertEqual(slug, "good")
@@ -73,13 +83,17 @@ class FindSlugRetryTests(TempDirTestCase):
             if call_count[0] >= 2:
                 # On second+ read, add the slug
                 transcript.write_text(
-                    json.dumps({"message": "hello"}) + "\n" + json.dumps({"slug": "found"}),
+                    json.dumps({"message": "hello"})
+                    + "\n"
+                    + json.dumps({"slug": "found"}),
                     encoding="utf-8",
                 )
             return original_open(*args, **kwargs)
 
         with mock.patch("builtins.open", side_effect=mock_open_with_delayed_slug):
-            slug = export_plan.find_slug_in_transcript(transcript, retries=3, delay=0.01)
+            slug = export_plan.find_slug_in_transcript(
+                transcript, retries=3, delay=0.01
+            )
 
         self.assertEqual(slug, "found")
 
@@ -92,7 +106,9 @@ class ExportPlanMainTests(TempDirTestCase):
 
     def test_missing_transcript_file_returns_zero(self) -> None:
         transcript = self.tmpdir / "missing.jsonl"
-        with mock.patch("sys.stdin", io.StringIO(json.dumps({"transcript_path": str(transcript)}))):
+        with mock.patch(
+            "sys.stdin", io.StringIO(json.dumps({"transcript_path": str(transcript)}))
+        ):
             result = export_plan.main()
         self.assertEqual(result, 0)
 
@@ -111,7 +127,10 @@ class ExportPlanMainTests(TempDirTestCase):
         with mock.patch("pathlib.Path.home", return_value=home_dir):
             with mock.patch("pathlib.Path.cwd", return_value=project_dir):
                 with mock.patch("shutil.copy2", side_effect=OSError("disk full")):
-                    with mock.patch("sys.stdin", io.StringIO(json.dumps({"transcript_path": str(transcript)}))):
+                    with mock.patch(
+                        "sys.stdin",
+                        io.StringIO(json.dumps({"transcript_path": str(transcript)})),
+                    ):
                         result = export_plan.main()
 
         self.assertEqual(result, 1)
@@ -207,4 +226,5 @@ class ExportPlanMainTests(TempDirTestCase):
 
 if __name__ == "__main__":
     import unittest
+
     unittest.main()

@@ -46,7 +46,9 @@ def main() -> int:
         with open(env_file, "a", encoding="utf-8") as f:
             try:
                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-                f.write(f'export TRANSCRIPT_PATH="{os.path.dirname(transcript_path)}"\n')
+                f.write(
+                    f'export TRANSCRIPT_PATH="{os.path.dirname(transcript_path)}"\n'
+                )
             finally:
                 try:
                     fcntl.flock(f.fileno(), fcntl.LOCK_UN)

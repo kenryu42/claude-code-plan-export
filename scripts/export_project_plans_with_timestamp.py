@@ -60,7 +60,9 @@ def main() -> int:
         source_file = plans_dir / f"{slug}.md"
 
         if not source_file.exists():
-            print(f"Plan file not found for slug '{slug}': {source_file}", file=sys.stderr)
+            print(
+                f"Plan file not found for slug '{slug}': {source_file}", file=sys.stderr
+            )
             continue
 
         timestamp = get_file_timestamp(source_file)
