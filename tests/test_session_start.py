@@ -1,3 +1,7 @@
+"""Tests for scripts/session_start.py."""
+
+# ruff: noqa: E402
+
 import io
 import json
 import os

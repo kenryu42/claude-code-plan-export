@@ -1,3 +1,7 @@
+"""Tests for scripts/export_plan.py."""
+
+# ruff: noqa: E402
+
 import io
 import json
 import sys

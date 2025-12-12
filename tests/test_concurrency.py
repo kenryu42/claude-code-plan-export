@@ -1,3 +1,7 @@
+"""Concurrency-related tests."""
+
+# ruff: noqa: E402
+
 import io
 import json
 import os
