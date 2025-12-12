@@ -38,6 +38,14 @@ Export all plans from the current project:
 
 This scans all session transcripts and exports any associated plan files.
 
+Export all plans with timestamps:
+
+```
+/export-project-plans-with-timestamp
+```
+
+This exports plans with the source file's last modified time prepended: `YYYYMMDD-HH:MM:SS-plan-{slug}.md`
+
 ## How It Works
 
 1. Plan with Opus or any model in Plan Mode as usual
@@ -56,8 +64,10 @@ scripts/
   session_start.py      # SessionStart hook
   export_plan.py        # SessionEnd hook
   export_project_plans.py  # Manual export command
+  export_project_plans_with_timestamp.py  # Manual export command with timestamp prefix
 commands/
   export-project-plans.md  # Slash command definition
+  export-project-plans-with-timestamp.md  # Slash command definition
 ```
 
 ## Development

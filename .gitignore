@@ -1,4 +1,6 @@
 .claude/
+.ruff_cache/
 __pycache__/
 log*
 plan\-*.md
+*\-plan\-*.md
