@@ -46,6 +46,16 @@ Export all plans with timestamps:
 
 This exports plans with the source file's last modified time prepended: `YYYYMMDD-HH:MM:SS-plan-{slug}.md`
 
+### Execute Plan
+
+Execute the most recent plan in the current directory:
+
+```
+/execute-plan
+```
+
+This finds the most recently modified `*plan-*.md` file and executes it.
+
 ## How It Works
 
 1. Plan with Opus or any model in Plan Mode as usual
@@ -68,6 +78,7 @@ scripts/
 commands/
   export-project-plans.md  # Slash command definition
   export-project-plans-with-timestamp.md  # Slash command definition
+  execute-plan.md          # Execute most recent plan
 ```
 
 ## Development
