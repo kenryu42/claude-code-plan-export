@@ -8,11 +8,6 @@
       "extra-files": [
         {
           "type": "json",
-          "path": ".claude-plugin/marketplace.json",
-          "jsonpath": "$.plugins[?(@.name == 'plan-export')].version"
-        },
-        {
-          "type": "json",
           "path": ".claude-plugin/plugin.json",
           "jsonpath": "$.version"
         }
