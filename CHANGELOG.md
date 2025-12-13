@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.1...v0.1.2) (2025-12-13)
+
+
+### Features
+
+* add execute-plan slash command ([8d72f31](https://github.com/kenryu42/claude-code-plan-export/commit/8d72f311a76ccf384d4ba733f2a558647f1c4fda))
+
 ## [0.1.1](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.0...v0.1.1) (2025-12-12)
 
 
