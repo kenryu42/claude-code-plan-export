@@ -47,7 +47,7 @@ def main() -> int:
             try:
                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                 f.write(
-                    f'export TRANSCRIPT_PATH="{os.path.dirname(transcript_path)}"\n'
+                    f'export TRANSCRIPT_DIR="{os.path.dirname(transcript_path)}"\n'
                 )
             finally:
                 try:
@@ -55,7 +55,7 @@ def main() -> int:
                 except OSError:
                     pass
 
-    print(f"Exported TRANSCRIPT_PATH={transcript_path}", file=sys.stderr)
+    print(f"Exported TRANSCRIPT_DIR={os.path.dirname(transcript_path)}", file=sys.stderr)
     return 0
 
 

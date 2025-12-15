@@ -78,7 +78,7 @@ class ConcurrencyTests(TempDirTestCase):
 
         content = env_file.read_text(encoding="utf-8") if env_file.exists() else ""
         lines = [line for line in content.splitlines() if line]
-        expected_line = f'export TRANSCRIPT_PATH="{os.path.dirname(str(transcript))}"'
+        expected_line = f'export TRANSCRIPT_DIR="{os.path.dirname(str(transcript))}"'
         self.assertEqual(lines, [expected_line, expected_line])
 
     def test_concurrent_same_slug_copy(self) -> None:

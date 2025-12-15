@@ -38,7 +38,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
 
     def test_invalid_transcript_directory(self) -> None:
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(self.tmpdir / "missing")}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(self.tmpdir / "missing")}, clear=True
         ):
             result = export_project_plans_with_timestamp.main()
         self.assertEqual(result, 1)
@@ -65,7 +65,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
         expected_prefix = datetime.fromtimestamp(ts).strftime("%Y%m%d-%H:%M:%S")
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -93,7 +93,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
         (plans_dir / "ignored.md").write_text("plan ignored", encoding="utf-8")
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -116,7 +116,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
         )
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -158,7 +158,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
             return original_copy2(src, dst)
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):

@@ -57,7 +57,7 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
     def test_invalid_transcript_directory(self) -> None:
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(self.tmpdir / "missing")}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(self.tmpdir / "missing")}, clear=True
         ):
             result = export_project_plans.main()
 
@@ -93,7 +93,7 @@ class ExportProjectPlansMainTests(TempDirTestCase):
         (plans_dir / "two.md").write_text("plan two", encoding="utf-8")
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -121,7 +121,7 @@ class ExportProjectPlansMainTests(TempDirTestCase):
         )
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -143,7 +143,7 @@ class ExportProjectPlansMainTests(TempDirTestCase):
         )
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):
@@ -177,7 +177,7 @@ class ExportProjectPlansMainTests(TempDirTestCase):
             return original_copy2(src, dst)
 
         with mock.patch.dict(
-            os.environ, {"TRANSCRIPT_PATH": str(transcript_dir)}, clear=True
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
         ):
             with mock.patch("pathlib.Path.home", return_value=home_dir):
                 with mock.patch("pathlib.Path.cwd", return_value=project_dir):

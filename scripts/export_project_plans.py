@@ -2,7 +2,7 @@
 """
 Export all plan markdown files from ~/.claude/plans/ to project root.
 
-Scans all transcript JSONL files in TRANSCRIPT_PATH (excluding agent-* files),
+Scans all transcript JSONL files in TRANSCRIPT_DIR (excluding agent-* files),
 extracts plan slugs, and copies the corresponding plan files.
 """
 
@@ -36,15 +36,15 @@ def find_slugs_in_transcript(transcript_path: Path) -> set[str]:
 
 
 def main() -> int:
-    # 1. Get TRANSCRIPT_PATH env variable
-    transcript_dir = os.environ.get("TRANSCRIPT_PATH")
+    # 1. Get TRANSCRIPT_DIR env variable
+    transcript_dir = os.environ.get("TRANSCRIPT_DIR")
     if not transcript_dir:
-        print("TRANSCRIPT_PATH environment variable is not set", file=sys.stderr)
+        print("TRANSCRIPT_DIR environment variable is not set", file=sys.stderr)
         return 1
 
     transcript_path = Path(transcript_dir)
     if not transcript_path.is_dir():
-        print(f"TRANSCRIPT_PATH is not a directory: {transcript_dir}", file=sys.stderr)
+        print(f"TRANSCRIPT_DIR is not a directory: {transcript_dir}", file=sys.stderr)
         return 1
 
     # 2. Parse all JSONL files, skip agent-* files

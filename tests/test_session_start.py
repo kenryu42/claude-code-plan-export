@@ -31,7 +31,7 @@ class SessionStartTests(TempDirTestCase):
 
         self.assertEqual(result, 0)
         content = env_file.read_text(encoding="utf-8")
-        expected = f'export TRANSCRIPT_PATH="{os.path.dirname(str(transcript))}"\n'
+        expected = f'export TRANSCRIPT_DIR="{os.path.dirname(str(transcript))}"\n'
         self.assertEqual(content, expected)
 
     def test_missing_env_var_skips_write(self) -> None:
