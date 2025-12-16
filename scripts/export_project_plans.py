@@ -17,7 +17,7 @@ def find_slugs_in_transcript(transcript_path: Path) -> set[str]:
     """Scan transcript JSONL for all objects containing a 'slug' field."""
     slugs: set[str] = set()
     try:
-        with open(transcript_path, "r", encoding="utf-8") as f:
+        with open(transcript_path, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if not line:
@@ -30,7 +30,7 @@ def find_slugs_in_transcript(transcript_path: Path) -> set[str]:
                     continue
     except FileNotFoundError:
         print(f"Transcript file not found: {transcript_path}", file=sys.stderr)
-    except IOError as e:
+    except OSError as e:
         print(f"Error reading transcript: {e}", file=sys.stderr)
     return slugs
 
@@ -92,7 +92,7 @@ def main() -> int:
             shutil.copy2(source_file, dest_file)
             print(f"Copied: {dest_file}")
             copied += 1
-        except IOError as e:
+        except OSError as e:
             print(f"Error copying {source_file}: {e}", file=sys.stderr)
 
     print(f"Exported {copied} plan file(s)")

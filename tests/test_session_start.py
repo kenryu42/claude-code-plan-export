@@ -7,6 +7,7 @@ import shlex
 from unittest import mock
 
 from scripts import session_start
+
 from . import TempDirTestCase
 
 

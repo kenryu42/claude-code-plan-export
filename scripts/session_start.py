@@ -49,7 +49,7 @@ def main() -> int:
         with open(env_file, "a", encoding="utf-8") as f:
             fcntl.flock(f.fileno(), fcntl.LOCK_EX)
             f.write(f"export TRANSCRIPT_DIR={shlex.quote(transcript_dir)}\n")
-    except (OSError, IOError) as e:
+    except OSError as e:
         print(f"Error writing to env file: {e}", file=sys.stderr)
         return 1
 

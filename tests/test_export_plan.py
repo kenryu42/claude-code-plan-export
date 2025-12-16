@@ -5,6 +5,7 @@ import json
 from unittest import mock
 
 from scripts import export_plan
+
 from . import TempDirTestCase
 
 

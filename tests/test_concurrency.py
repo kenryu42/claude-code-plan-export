@@ -12,6 +12,7 @@ from pathlib import Path
 from unittest import mock
 
 from scripts import export_plan
+
 from . import TempDirTestCase
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,10 @@ SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 
 class ConcurrencyTests(TempDirTestCase):
     def test_env_file_concurrent_writes(self) -> None:
-        """Test that concurrent process invocations write to env file without corruption."""
+        """
+        Test that concurrent process invocations write to env file without
+        corruption.
+        """
         env_file = self.tmpdir / "env.sh"
         transcript = self.tmpdir / "transcript.jsonl"
         transcript.write_text(json.dumps({"slug": "s"}), encoding="utf-8")
@@ -81,7 +85,7 @@ class ConcurrencyTests(TempDirTestCase):
         thread_local = threading.local()
 
         def slow_copy(src, dst, *, follow_symlinks=True):
-            data = getattr(thread_local, "content")
+            data = thread_local.content
             dest_path = Path(dst)
             with open(dest_path, "w", encoding="utf-8") as f:
                 mid = max(1, len(data) // 2)

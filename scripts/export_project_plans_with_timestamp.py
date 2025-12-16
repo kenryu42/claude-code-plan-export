@@ -86,7 +86,7 @@ def main() -> int:
             shutil.copy2(source_file, dest_file)
             print(f"Copied: {dest_file}")
             copied += 1
-        except IOError as e:
+        except OSError as e:
             print(f"Error copying {source_file}: {e}", file=sys.stderr)
 
     print(f"Exported {copied} plan file(s)")

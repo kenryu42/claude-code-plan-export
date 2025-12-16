@@ -23,7 +23,7 @@ def find_slug_in_transcript(
 
     def _scan_once() -> str | None:
         try:
-            with open(transcript_path, "r", encoding="utf-8") as f:
+            with open(transcript_path, encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
                     if not line:
@@ -37,7 +37,7 @@ def find_slug_in_transcript(
         except FileNotFoundError:
             print(f"Transcript file not found: {transcript_path}", file=sys.stderr)
             return None
-        except IOError as e:
+        except OSError as e:
             print(f"Error reading transcript: {e}", file=sys.stderr)
             return None
         return None
@@ -86,7 +86,7 @@ def main() -> int:
     except FileNotFoundError:
         print(f"Error copying file: {source_file} not found", file=sys.stderr)
         return 0
-    except IOError as e:
+    except OSError as e:
         print(f"Error copying file: {e}", file=sys.stderr)
         return 1
 

@@ -6,6 +6,7 @@ from datetime import datetime
 from unittest import mock
 
 from scripts import export_project_plans_with_timestamp
+
 from . import TempDirTestCase
 
 
@@ -197,7 +198,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
 
         def mock_copy2(src, dst):
             if "fail" in str(src):
-                raise IOError("disk full")
+                raise OSError("disk full")
             return original_copy2(src, dst)
 
         with mock.patch.dict(
