@@ -1,7 +1,7 @@
 {
-  "name": "claude-plan-export-dev",
+  "name": "cc-plan-export-dev",
   "metadata": {
-    "description": "Development marketplace for claude plan export plugin",
+    "description": "Development marketplace for claude code plan export plugin",
     "version": "1.0.0"
   },
   "owner": {
@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "plan-export",
+      "name": "plan-export-dev",
       "description": "Auto-save your Claude Code plans to the project root when you finish planning.",
       "source": "./",
       "author": {
