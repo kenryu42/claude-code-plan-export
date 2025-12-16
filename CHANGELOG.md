@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.2...v0.1.3) (2025-12-16)
+
+
+### Bug Fixes
+
+* enhance session_start hook with file locking and validation ([6f8abd8](https://github.com/kenryu42/claude-code-plan-export/commit/6f8abd8258f2a201dda5e089e17ab2bb06fd5bc7))
+
 ## [0.1.2](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.1...v0.1.2) (2025-12-13)
 
 
