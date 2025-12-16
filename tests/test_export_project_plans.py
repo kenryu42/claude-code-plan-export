@@ -63,7 +63,40 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
         self.assertEqual(result, 1)
 
-    def test_exports_multiple_plan_files_skipping_agent_transcripts(self) -> None:
+    def test_single_plan_file_exported_to_cwd_not_plans_folder(self) -> None:
+        """When only one plan file exists, it should go to cwd, not plans/."""
+        project_dir = self.tmpdir / "project"
+        project_dir.mkdir()
+
+        home_dir = self.tmpdir / "home"
+        plans_dir = home_dir / ".claude" / "plans"
+        plans_dir.mkdir(parents=True)
+
+        transcript_dir = self.tmpdir / "transcripts"
+        transcript_dir.mkdir()
+
+        (transcript_dir / "a.jsonl").write_text(
+            json.dumps({"slug": "only"}), encoding="utf-8"
+        )
+        (plans_dir / "only.md").write_text("single plan", encoding="utf-8")
+
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
+        ):
+            with mock.patch("pathlib.Path.home", return_value=home_dir):
+                with mock.patch("pathlib.Path.cwd", return_value=project_dir):
+                    result = export_project_plans.main()
+
+        self.assertEqual(result, 0)
+        # Single file should be in cwd, not plans/ folder
+        self.assertTrue((project_dir / "plan-only.md").exists())
+        self.assertFalse((project_dir / "plans").exists())
+        self.assertEqual(
+            (project_dir / "plan-only.md").read_text(encoding="utf-8"), "single plan"
+        )
+
+    def test_multiple_plan_files_exported_to_plans_folder(self) -> None:
+        """When 2+ plan files exist, they should go to plans/ folder."""
         project_dir = self.tmpdir / "project"
         project_dir.mkdir()
 
@@ -100,13 +133,18 @@ class ExportProjectPlansMainTests(TempDirTestCase):
                     result = export_project_plans.main()
 
         self.assertEqual(result, 0)
-        exported_one = project_dir / "plan-one.md"
-        exported_two = project_dir / "plan-two.md"
+        # Multiple files should be in plans/ folder
+        self.assertTrue((project_dir / "plans").is_dir())
+        exported_one = project_dir / "plans" / "plan-one.md"
+        exported_two = project_dir / "plans" / "plan-two.md"
 
         self.assertTrue(exported_one.exists())
         self.assertTrue(exported_two.exists())
         self.assertEqual(exported_one.read_text(encoding="utf-8"), "plan one")
         self.assertEqual(exported_two.read_text(encoding="utf-8"), "plan two")
+        # Should NOT be in project root
+        self.assertFalse((project_dir / "plan-one.md").exists())
+        self.assertFalse((project_dir / "plan-two.md").exists())
 
     def test_no_slugs_in_any_file_returns_zero(self) -> None:
         project_dir = self.tmpdir / "project"
@@ -186,10 +224,10 @@ class ExportProjectPlansMainTests(TempDirTestCase):
 
         # Should return 0 (logs error but continues)
         self.assertEqual(result, 0)
-        # Succeed file should be copied
-        self.assertTrue((project_dir / "plan-succeed.md").exists())
+        # Succeed file should be copied (in plans/ folder since 2 valid files)
+        self.assertTrue((project_dir / "plans" / "plan-succeed.md").exists())
         # Fail file should NOT be copied
-        self.assertFalse((project_dir / "plan-fail.md").exists())
+        self.assertFalse((project_dir / "plans" / "plan-fail.md").exists())
 
 
 if __name__ == "__main__":

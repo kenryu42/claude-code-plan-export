@@ -43,7 +43,8 @@ class ExportWithTimestampMainTests(TempDirTestCase):
             result = export_project_plans_with_timestamp.main()
         self.assertEqual(result, 1)
 
-    def test_exports_with_correct_timestamp_prefix(self) -> None:
+    def test_single_file_exports_to_cwd_not_plans_folder(self) -> None:
+        """When only one plan file exists, it should go to cwd, not plans/."""
         project_dir = self.tmpdir / "project"
         project_dir.mkdir()
 
@@ -72,9 +73,59 @@ class ExportWithTimestampMainTests(TempDirTestCase):
                     result = export_project_plans_with_timestamp.main()
 
         self.assertEqual(result, 0)
+        # Single file should be in cwd, not plans/ folder
         exported = project_dir / f"{expected_prefix}-plan-one.md"
         self.assertTrue(exported.exists())
+        self.assertFalse((project_dir / "plans").exists())
         self.assertEqual(exported.read_text(encoding="utf-8"), "plan one")
+
+    def test_multiple_files_export_to_plans_folder(self) -> None:
+        """When 2+ plan files exist, they should go to plans/ folder."""
+        project_dir = self.tmpdir / "project"
+        project_dir.mkdir()
+
+        home_dir = self.tmpdir / "home"
+        plans_dir = home_dir / ".claude" / "plans"
+        plans_dir.mkdir(parents=True)
+
+        transcript_dir = self.tmpdir / "transcripts"
+        transcript_dir.mkdir()
+        (transcript_dir / "a.jsonl").write_text(
+            json.dumps({"slug": "one"}) + "\n" + json.dumps({"slug": "two"}),
+            encoding="utf-8",
+        )
+
+        plan_one = plans_dir / "one.md"
+        plan_two = plans_dir / "two.md"
+        plan_one.write_text("plan one", encoding="utf-8")
+        plan_two.write_text("plan two", encoding="utf-8")
+
+        ts_one = 1735689600
+        ts_two = 1735689700
+        os.utime(plan_one, (ts_one, ts_one))
+        os.utime(plan_two, (ts_two, ts_two))
+        prefix_one = datetime.fromtimestamp(ts_one).strftime("%Y%m%d-%H:%M:%S")
+        prefix_two = datetime.fromtimestamp(ts_two).strftime("%Y%m%d-%H:%M:%S")
+
+        with mock.patch.dict(
+            os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
+        ):
+            with mock.patch("pathlib.Path.home", return_value=home_dir):
+                with mock.patch("pathlib.Path.cwd", return_value=project_dir):
+                    result = export_project_plans_with_timestamp.main()
+
+        self.assertEqual(result, 0)
+        # Multiple files should be in plans/ folder
+        self.assertTrue((project_dir / "plans").is_dir())
+        exported_one = project_dir / "plans" / f"{prefix_one}-plan-one.md"
+        exported_two = project_dir / "plans" / f"{prefix_two}-plan-two.md"
+        self.assertTrue(exported_one.exists())
+        self.assertTrue(exported_two.exists())
+        self.assertEqual(exported_one.read_text(encoding="utf-8"), "plan one")
+        self.assertEqual(exported_two.read_text(encoding="utf-8"), "plan two")
+        # Should NOT be in project root
+        self.assertFalse(any(project_dir.glob("*-plan-one.md")))
+        self.assertFalse(any(project_dir.glob("*-plan-two.md")))
 
     def test_skips_agent_transcripts(self) -> None:
         project_dir = self.tmpdir / "project"
@@ -166,8 +217,9 @@ class ExportWithTimestampMainTests(TempDirTestCase):
                         result = export_project_plans_with_timestamp.main()
 
         self.assertEqual(result, 0)
-        self.assertFalse(any(project_dir.glob("*-plan-fail.md")))
-        self.assertTrue(any(project_dir.glob("*-plan-succeed.md")))
+        # Files should be in plans/ folder since 2 valid files
+        self.assertFalse(any((project_dir / "plans").glob("*-plan-fail.md")))
+        self.assertTrue(any((project_dir / "plans").glob("*-plan-succeed.md")))
 
 
 if __name__ == "__main__":

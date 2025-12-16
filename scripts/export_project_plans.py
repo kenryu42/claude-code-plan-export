@@ -59,19 +59,34 @@ def main() -> int:
         print("No slugs found in any transcript files", file=sys.stderr)
         return 0
 
-    # 3. Copy plan files to project root
-    plans_dir = Path.home() / ".claude" / "plans"
-    copied = 0
+    # 3. Collect valid plan files
+    plans_source_dir = Path.home() / ".claude" / "plans"
+    valid_files: list[tuple[str, Path]] = []
 
     for slug in sorted(all_slugs):
-        source_file = plans_dir / f"{slug}.md"
-        dest_file = Path.cwd() / f"plan-{slug}.md"
+        source_file = plans_source_dir / f"{slug}.md"
 
         if not source_file.exists():
             print(
                 f"Plan file not found for slug '{slug}': {source_file}", file=sys.stderr
             )
             continue
+
+        valid_files.append((slug, source_file))
+
+    # 4. Copy plan files (use plans/ folder only if more than one file)
+    copied = 0
+    use_plans_folder = len(valid_files) > 1
+    plans_dest_dir = Path.cwd() / "plans"
+
+    if use_plans_folder and not plans_dest_dir.exists():
+        plans_dest_dir.mkdir(parents=True)
+
+    for slug, source_file in valid_files:
+        if use_plans_folder:
+            dest_file = plans_dest_dir / f"plan-{slug}.md"
+        else:
+            dest_file = Path.cwd() / f"plan-{slug}.md"
 
         try:
             shutil.copy2(source_file, dest_file)
