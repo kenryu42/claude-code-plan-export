@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
       - name: Run tests
-        run: python3 tests/run_tests.py
+        run: python3 -m unittest discover -s tests -t . -v
 
   release-please:
     needs: test

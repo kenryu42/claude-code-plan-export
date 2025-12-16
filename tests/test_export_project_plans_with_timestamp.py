@@ -1,20 +1,12 @@
 """Tests for scripts/export_project_plans_with_timestamp.py."""
 
-# ruff: noqa: E402
-
 import json
 import os
-import sys
 from datetime import datetime
-from pathlib import Path
 from unittest import mock
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
 from scripts import export_project_plans_with_timestamp
-from tests import TempDirTestCase
+from . import TempDirTestCase
 
 
 class GetFileTimestampTests(TempDirTestCase):

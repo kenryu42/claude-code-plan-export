@@ -1,21 +1,13 @@
 """Tests for scripts/session_start.py."""
 
-# ruff: noqa: E402
-
 import io
 import json
 import os
 import shlex
-import sys
-from pathlib import Path
 from unittest import mock
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
 from scripts import session_start
-from tests import TempDirTestCase
+from . import TempDirTestCase
 
 
 class SessionStartTests(TempDirTestCase):
