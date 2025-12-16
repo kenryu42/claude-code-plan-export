@@ -7,6 +7,7 @@ Auto-save your Claude Code plans to the project root when you finish planning in
 - **Optimize token usage** - Plan with Opus 4.5 for quality, then execute with faster, cheaper models
 - **Clean implementation context** - Start each implementation with a fresh context window, avoiding artifacts from planning sessions
 - **Flexible workflows** - Plan once, then execute with any model you choose, not just Claude Code
+- **Zero Passive Context Cost** - Unlike plugins that rely on MCP servers or Skills, this plugin adds no overhead to the context window.
 
 ## Features
 
