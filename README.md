@@ -103,6 +103,14 @@ commands/
 ## Development
 
 ```bash
+# Option 1: Using just (Recommended)
+# Install dependencies and setup hooks
+just setup
+
+# Run all checks (tests, lint, type check, dead code)
+just check
+
+# Option 2: Manual commands
 # Install dependencies
 uv sync
 
