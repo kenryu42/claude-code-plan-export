@@ -2,24 +2,21 @@
 
 ## [0.1.3](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.2...v0.1.3) (2025-12-16)
 
-
 ### Bug Fixes
 
-* enhance session_start hook with file locking and validation ([6f8abd8](https://github.com/kenryu42/claude-code-plan-export/commit/6f8abd8258f2a201dda5e089e17ab2bb06fd5bc7))
+- enhance session_start hook with file locking and validation ([6f8abd8](https://github.com/kenryu42/claude-code-plan-export/commit/6f8abd8258f2a201dda5e089e17ab2bb06fd5bc7))
 
 ## [0.1.2](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.1...v0.1.2) (2025-12-13)
 
-
 ### Features
 
-* add execute-plan slash command ([8d72f31](https://github.com/kenryu42/claude-code-plan-export/commit/8d72f311a76ccf384d4ba733f2a558647f1c4fda))
+- add execute-plan slash command ([8d72f31](https://github.com/kenryu42/claude-code-plan-export/commit/8d72f311a76ccf384d4ba733f2a558647f1c4fda))
 
 ## [0.1.1](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.0...v0.1.1) (2025-12-12)
 
-
 ### Features
 
-* add timestamped plan export command ([0ff110b](https://github.com/kenryu42/claude-code-plan-export/commit/0ff110b6049cb48b688f0a8d23436b90beee7609))
+- add timestamped plan export command ([0ff110b](https://github.com/kenryu42/claude-code-plan-export/commit/0ff110b6049cb48b688f0a8d23436b90beee7609))
 
 ## 0.1.0 (2025-12-09)
 
@@ -32,7 +29,7 @@
 - add session hooks configuration ([3c0e4ae](https://github.com/kenryu42/claude-code-plan-export/commit/3c0e4aee96783a7573cd98a15deea749c22857d8))
 - add session start hook script ([8df7bc2](https://github.com/kenryu42/claude-code-plan-export/commit/8df7bc2c11adfbb2039d3e0a5e6dc72ebb0b5486))
 
-## Changelog
+---
 
 All notable changes to this project will be documented in this file.
 
