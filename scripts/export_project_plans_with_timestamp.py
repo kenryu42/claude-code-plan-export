@@ -23,9 +23,9 @@ except ModuleNotFoundError:  # pragma: no cover
 
 
 def get_file_timestamp(file_path: Path) -> str:
-    """Get file mtime formatted as YYYYMMDD-HH:MM:SS."""
+    """Get file mtime formatted as YYYYMMDD-HHMMSS."""
     mtime = file_path.stat().st_mtime
-    return datetime.fromtimestamp(mtime).strftime("%Y%m%d-%H:%M:%S")
+    return datetime.fromtimestamp(mtime).strftime("%Y%m%d-%H%M%S")
 
 
 def main() -> int:

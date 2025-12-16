@@ -18,8 +18,8 @@ class GetFileTimestampTests(TempDirTestCase):
 
         stamp = export_project_plans_with_timestamp.get_file_timestamp(f)
 
-        self.assertRegex(stamp, r"^\d{8}-\d{2}:\d{2}:\d{2}$")
-        self.assertEqual(stamp, datetime.fromtimestamp(ts).strftime("%Y%m%d-%H:%M:%S"))
+        self.assertRegex(stamp, r"^\d{8}-\d{6}$")
+        self.assertEqual(stamp, datetime.fromtimestamp(ts).strftime("%Y%m%d-%H%M%S"))
 
 
 class ExportWithTimestampMainTests(TempDirTestCase):
@@ -55,7 +55,7 @@ class ExportWithTimestampMainTests(TempDirTestCase):
 
         ts = 1735689600
         os.utime(plan_file, (ts, ts))
-        expected_prefix = datetime.fromtimestamp(ts).strftime("%Y%m%d-%H:%M:%S")
+        expected_prefix = datetime.fromtimestamp(ts).strftime("%Y%m%d-%H%M%S")
 
         with mock.patch.dict(
             os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
@@ -96,8 +96,8 @@ class ExportWithTimestampMainTests(TempDirTestCase):
         ts_two = 1735689700
         os.utime(plan_one, (ts_one, ts_one))
         os.utime(plan_two, (ts_two, ts_two))
-        prefix_one = datetime.fromtimestamp(ts_one).strftime("%Y%m%d-%H:%M:%S")
-        prefix_two = datetime.fromtimestamp(ts_two).strftime("%Y%m%d-%H:%M:%S")
+        prefix_one = datetime.fromtimestamp(ts_one).strftime("%Y%m%d-%H%M%S")
+        prefix_two = datetime.fromtimestamp(ts_two).strftime("%Y%m%d-%H%M%S")
 
         with mock.patch.dict(
             os.environ, {"TRANSCRIPT_DIR": str(transcript_dir)}, clear=True
