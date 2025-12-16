@@ -5,6 +5,8 @@
 import io
 import json
 import os
+import shlex
+import subprocess
 import sys
 import threading
 import time
@@ -15,70 +17,53 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts import export_plan, session_start
+from scripts import export_plan
 from tests import TempDirTestCase
 
-
-class _SlowWriter:
-    def __init__(self, wrapped, delay: float) -> None:
-        self._wrapped = wrapped
-        self._delay = delay
-
-    def write(self, data: str):
-        mid = max(1, len(data) // 2)
-        first, second = data[:mid], data[mid:]
-        written = self._wrapped.write(first)
-        self._wrapped.flush()
-        time.sleep(self._delay)
-        written += self._wrapped.write(second)
-        self._wrapped.flush()
-        return written
-
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
-
-    def __enter__(self):
-        self._wrapped.__enter__()
-        return self
-
-    def __exit__(self, exc_type, exc, tb):
-        return self._wrapped.__exit__(exc_type, exc, tb)
+SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 
 
 class ConcurrencyTests(TempDirTestCase):
     def test_env_file_concurrent_writes(self) -> None:
+        """Test that concurrent process invocations write to env file without corruption."""
         env_file = self.tmpdir / "env.sh"
         transcript = self.tmpdir / "transcript.jsonl"
         transcript.write_text(json.dumps({"slug": "s"}), encoding="utf-8")
 
         input_json = json.dumps({"transcript_path": str(transcript)})
-        start_barrier = threading.Barrier(2)
-        real_open = open
+        script_path = SCRIPTS_DIR / "session_start.py"
 
-        def slow_open(path, mode="r", *args, **kwargs):
-            file_obj = real_open(path, mode, *args, **kwargs)
-            if Path(path) == env_file and "a" in mode:
-                return _SlowWriter(file_obj, delay=0.02)
-            return file_obj
+        def run_script():
+            result = subprocess.run(
+                [sys.executable, str(script_path)],
+                input=input_json,
+                capture_output=True,
+                text=True,
+                env={**os.environ, "CLAUDE_ENV_FILE": str(env_file)},
+            )
+            return result.returncode
+
+        # Start both processes and wait for them
+        barrier = threading.Barrier(2)
+        results = []
 
         def worker():
-            with mock.patch("sys.stdin", io.StringIO(input_json)):
-                start_barrier.wait()
-                session_start.main()
+            barrier.wait()
+            results.append(run_script())
 
-        with mock.patch.dict(
-            os.environ, {"CLAUDE_ENV_FILE": str(env_file)}, clear=True
-        ):
-            with mock.patch("builtins.open", side_effect=slow_open):
-                threads = [threading.Thread(target=worker) for _ in range(2)]
-                for t in threads:
-                    t.start()
-                for t in threads:
-                    t.join()
+        threads = [threading.Thread(target=worker) for _ in range(2)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        # Both should succeed
+        self.assertEqual(results, [0, 0])
 
         content = env_file.read_text(encoding="utf-8") if env_file.exists() else ""
         lines = [line for line in content.splitlines() if line]
-        expected_line = f'export TRANSCRIPT_DIR="{os.path.dirname(str(transcript))}"'
+        transcript_dir = os.path.dirname(str(transcript))
+        expected_line = f"export TRANSCRIPT_DIR={shlex.quote(transcript_dir)}"
         self.assertEqual(lines, [expected_line, expected_line])
 
     def test_concurrent_same_slug_copy(self) -> None:

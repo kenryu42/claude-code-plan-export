@@ -5,14 +5,11 @@ Export transcript_path from stdin JSON to CLAUDE_ENV_FILE.
 Called on SessionStart hook to make transcript path available to other hooks.
 """
 
+import fcntl
 import json
 import os
+import shlex
 import sys
-import fcntl
-import threading
-
-
-_ENV_FILE_LOCK = threading.Lock()
 
 
 def main() -> int:
@@ -23,39 +20,40 @@ def main() -> int:
 
     print(f"CLAUDE_ENV_FILE: {env_file}", file=sys.stderr)
 
-    with _ENV_FILE_LOCK:
-        raw_input = sys.stdin.read()
-        if not raw_input and hasattr(sys.stdin, "seek"):
-            try:
-                sys.stdin.seek(0)
-                raw_input = sys.stdin.read()
-            except Exception:
-                pass
+    raw_input = sys.stdin.read()
+    try:
+        input_data = json.loads(raw_input)
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON input: {e}", file=sys.stderr)
+        return 1
 
-        try:
-            input_data = json.loads(raw_input)
-        except json.JSONDecodeError as e:
-            print(f"Invalid JSON input: {e}", file=sys.stderr)
-            return 0
+    transcript_path = input_data.get("transcript_path")
+    if not transcript_path:
+        print("No transcript_path in input", file=sys.stderr)
+        return 1
 
-        transcript_path = input_data.get("transcript_path")
-        if not transcript_path:
-            print("No transcript_path in input", file=sys.stderr)
-            return 0
+    if not isinstance(transcript_path, str):
+        print(
+            f"transcript_path must be a string, got {type(transcript_path).__name__}",
+            file=sys.stderr,
+        )
+        return 1
 
+    transcript_dir = os.path.abspath(os.path.dirname(transcript_path) or ".")
+
+    if not os.path.isdir(transcript_dir):
+        print(f"Transcript directory does not exist: {transcript_dir}", file=sys.stderr)
+        return 1
+
+    try:
         with open(env_file, "a", encoding="utf-8") as f:
-            try:
-                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-                f.write(
-                    f'export TRANSCRIPT_DIR="{os.path.dirname(transcript_path)}"\n'
-                )
-            finally:
-                try:
-                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-                except OSError:
-                    pass
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+            f.write(f"export TRANSCRIPT_DIR={shlex.quote(transcript_dir)}\n")
+    except (OSError, IOError) as e:
+        print(f"Error writing to env file: {e}", file=sys.stderr)
+        return 1
 
-    print(f"Exported TRANSCRIPT_DIR={os.path.dirname(transcript_path)}", file=sys.stderr)
+    print(f"Exported TRANSCRIPT_DIR={transcript_dir}", file=sys.stderr)
     return 0
 
 
