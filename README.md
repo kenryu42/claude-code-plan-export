@@ -102,10 +102,18 @@ commands/
 
 ## Development
 
-Run tests:
-
 ```bash
-python3 -m unittest discover -s tests -t . -v
+# Install dependencies
+uv sync
+
+# Setup pre-commit hooks
+uv run pre-commit install
+
+# Run tests
+uv run pytest
+
+# Run linter
+uv run ruff check
 ```
 
 ## License

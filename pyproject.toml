@@ -1,0 +1,40 @@
+[project]
+name = "cc-plan-export"
+version = "0.1.0"
+description = "Scripts to export Claude Code project plans"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["scripts"]
+
+[tool.ruff]
+# Target Python 3.10 as determined by code analysis
+target-version = "py310"
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+# E: pycodestyle errors
+# F: Pyflakes
+# I: isort (import sorting)
+# B: flake8-bugbear (common logical bugs)
+# UP: pyupgrade (upgrade syntax to newer python versions)
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.14.9",
+    "pre-commit>=4.0.0",
+]
