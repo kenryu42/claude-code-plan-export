@@ -1,10 +1,16 @@
 # Claude Code Plan Export
 
-Auto-save your Claude Code plans to the project root when you finish planning.
+Auto-save your Claude Code plans to the project root when you finish planning in `Plan Mode`.
+
+## Why Use This Plugin?
+
+- **Optimize token usage** - Plan with Opus 4.5 for quality, then execute with faster, cheaper models
+- **Clean implementation context** - Start each implementation with a fresh context window, avoiding artifacts from planning sessions
+- **Flexible workflows** - Plan once, then execute with any model you choose, not just Claude Code
 
 ## Features
 
-- **Automatic Export** - Plans are exported when your Claude Code session ends
+- **Automatic Export** - Plans are exported when your start a new session or exit Claude Code
 - **Manual Export** - Use `/export-project-plans` to export all plans from the current project
 - **Concurrent Session Support** - Handles multiple Claude Code sessions safely with file locking
 
@@ -21,6 +27,16 @@ Install the plugin:
 ```
 /plugin install plan-export@cc-marketplace
 ```
+
+> [!NOTE]
+> You'll need to restart Claude Code in order to use the new plugin.
+
+## Auto-Update
+
+1. Run `/plugin` to open the plugin manager
+2. Select `Marketplaces`
+3. Choose `cc-marketplace` from the list
+4. Select `Enable auto-update`
 
 ## Usage
 
@@ -44,7 +60,7 @@ Export all plans with timestamps:
 /export-project-plans-with-timestamp
 ```
 
-This exports plans with the source file's last modified time prepended: `YYYYMMDD-HH:MM:SS-plan-{slug}.md`
+This exports plans with the source file's last modified time prepended: `YYYYMMDD-HHMMSS-plan-{slug}.md`
 
 ### Execute Plan
 
@@ -63,22 +79,24 @@ This finds the most recently modified `*plan-*.md` file and executes it.
 3. Start a new session (`/clear`, `/reset`, or `/new`)
 4. Your plan is automatically exported to your current working directory as `plan-{original_uid}.md`
 
+From there, you can execute the plan with whatever model you prefer.
+
 ## Project Structure
 
 ```
 .claude-plugin/
-  plugin.json           # Plugin metadata
+  plugin.json
 hooks/
-  hooks.json            # Hook definitions
+  hooks.json
 scripts/
-  session_start.py      # SessionStart hook
-  export_plan.py        # SessionEnd hook
-  export_project_plans.py  # Manual export command
-  export_project_plans_with_timestamp.py  # Manual export command with timestamp prefix
+  session_start.py
+  export_plan.py
+  export_project_plans.py
+  export_project_plans_with_timestamp.py
 commands/
-  export-project-plans.md  # Slash command definition
-  export-project-plans-with-timestamp.md  # Slash command definition
-  execute-plan.md          # Execute most recent plan
+  export-project-plans.md
+  export-project-plans-with-timestamp.md
+  execute-plan.md
 ```
 
 ## Development
@@ -86,7 +104,7 @@ commands/
 Run tests:
 
 ```bash
-python3 tests/run_tests.py
+python3 -m unittest discover -s tests -t . -v
 ```
 
 ## License
