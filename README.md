@@ -114,6 +114,13 @@ uv run pytest
 
 # Run linter
 uv run ruff check
+
+# Run type checker
+uv run mypy .
+
+# Run dead code detection
+uv run vulture
+
 ```
 
 ## License

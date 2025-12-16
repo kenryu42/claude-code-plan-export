@@ -13,3 +13,17 @@ repos:
         language: system
         types: [python]
         pass_filenames: true
+      - id: mypy
+        name: Mypy
+        entry: uv run mypy .
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: vulture
+        name: Vulture
+        entry: uv run vulture
+        language: system
+        types: [python]
+        pass_filenames: false
+
+

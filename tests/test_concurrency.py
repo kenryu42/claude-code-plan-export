@@ -84,7 +84,7 @@ class ConcurrencyTests(TempDirTestCase):
         start_barrier = threading.Barrier(len(contents))
         thread_local = threading.local()
 
-        def slow_copy(src, dst, *, follow_symlinks=True):
+        def slow_copy(src, dst, **_kwargs):
             data = thread_local.content
             dest_path = Path(dst)
             with open(dest_path, "w", encoding="utf-8") as f:
@@ -168,7 +168,7 @@ class ConcurrencyTests(TempDirTestCase):
 
         input_data = {"transcript_path": str(transcript)}
 
-        def disappearing_copy(src, dst, *, follow_symlinks=True):
+        def disappearing_copy(src, dst, **_kwargs):
             Path(src).unlink(missing_ok=True)
             raise FileNotFoundError(src)
 

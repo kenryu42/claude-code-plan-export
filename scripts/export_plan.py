@@ -30,8 +30,10 @@ def find_slug_in_transcript(
                         continue
                     try:
                         obj = json.loads(line)
-                        if "slug" in obj:
-                            return obj["slug"]
+                        if isinstance(obj, dict):
+                            slug = obj.get("slug")
+                            if isinstance(slug, str):
+                                return slug
                     except json.JSONDecodeError:
                         continue
         except FileNotFoundError:
