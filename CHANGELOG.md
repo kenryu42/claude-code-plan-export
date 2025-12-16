@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.3...v0.1.4) (2025-12-16)
+
+
+### Bug Fixes
+
+* change timestamp format from HH:MM:SS to HHMMSS ([4907ba3](https://github.com/kenryu42/claude-code-plan-export/commit/4907ba36cb1ee14dd2193bd161a542eedd98752a))
+
 ## [0.1.3](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.2...v0.1.3) (2025-12-16)
 
 ### Bug Fixes
