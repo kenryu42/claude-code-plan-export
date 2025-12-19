@@ -1,6 +1,6 @@
 {
   "name": "plan-export",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Auto-save your Claude Code plans to the project root when you finish planning.",
   "author": {
     "name": "J Liew",

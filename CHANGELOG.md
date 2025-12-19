@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.5 (2025-12-19)
+
+### Refactor
+
+- modernize exception handling and cleanup
+
+## v0.1.4 (2025-12-16)
+
+### Fix
+
+- change timestamp format from HH:MM:SS to HHMMSS
+
 ## [0.1.4](https://github.com/kenryu42/claude-code-plan-export/compare/v0.1.3...v0.1.4) (2025-12-16)
 
 
