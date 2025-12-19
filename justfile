@@ -13,3 +13,7 @@ check:
     uv run vulture
     # Run tests
     uv run pytest
+
+# Bump version and generate changelog
+bump:
+    uv run cz bump

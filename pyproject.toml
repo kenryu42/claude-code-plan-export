@@ -39,6 +39,7 @@ dev = [
     "pre-commit>=4.0.0",
     "mypy>=1.19.1",
     "vulture>=2.14",
+    "commitizen>=4.10.1",
 ]
 
 [tool.mypy]
@@ -58,4 +59,16 @@ paths = ["."]
 exclude = [".venv", "venv"]
 
 
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "pep440"
+version_provider = "pep621"
+update_changelog_on_bump = true
+major_version_zero = true
+version_files = [
+    "pyproject.toml:version",
+    ".claude-plugin/plugin.json:version"
+]
 
