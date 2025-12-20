@@ -69,6 +69,7 @@ update_changelog_on_bump = true
 major_version_zero = true
 version_files = [
     "pyproject.toml:version",
-    ".claude-plugin/plugin.json:version"
+    ".claude-plugin/plugin.json:version",
+    "README.md:version-__version__-blue"
 ]
 
