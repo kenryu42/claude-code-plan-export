@@ -1,86 +1,82 @@
 # Claude Code Plan Export
 
-Auto-save your Claude Code plans to the project root when you finish planning in `Plan Mode`.
+[![Version](https://img.shields.io/badge/version-0.1.5-blue)](https://github.com/kenryu42/claude-code-plan-export)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-orange)](https://platform.claude.com/docs/en/agent-sdk/plugins)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Auto-export your Claude Code plans to the project root when you finish planning.
 
 ## Why Use This Plugin?
 
-- **Optimize token usage** - Plan with Opus 4.5 for quality, then execute with faster, cheaper models
-- **Clean implementation context** - Start each implementation with a fresh context window, avoiding artifacts from planning sessions
-- **Flexible workflows** - Plan once, then execute with any model you choose, not just Claude Code
-- **Zero Passive Context Cost** - Unlike plugins that rely on MCP servers or Skills, this plugin adds no overhead to the context window.
+- **Optimize token usage** - Plan with Opus, execute with faster/cheaper models
+- **Clean implementation context** - Fresh context window without planning artifacts
+- **Flexible workflows** - Execute plans with any model, not just Claude Code
+- **Zero passive cost** - No MCP servers or Skills overhead
 
-## Features
+## Quick Start
 
-- **Automatic Export** - Plans are exported when your start a new session or exit Claude Code
-- **Manual Export** - Use `/export-project-plans` to export all plans from the current project
-- **Concurrent Session Support** - Handles multiple Claude Code sessions safely with file locking
-
-## Installation
-
-Add the marketplace to Claude Code:
+### Installation
 
 ```
 /plugin marketplace add kenryu42/cc-marketplace
-```
-
-Install the plugin:
-
-```
 /plugin install plan-export@cc-marketplace
 ```
 
-> [!NOTE]
-> You'll need to restart Claude Code in order to use the new plugin.
+> **Note:** Restart Claude Code after installation.
 
-## Auto-Update
+### Auto-Update
 
-1. Run `/plugin` to open the plugin manager
-2. Select `Marketplaces`
-3. Choose `cc-marketplace` from the list
-4. Select `Enable auto-update`
+1. Run `/plugin` → Select `Marketplaces` → Choose `cc-marketplace` → Enable auto-update
 
-## Usage
-
-### Automatic Export (Default)
-
-When you exit a Claude Code session that used plan mode, the plugin automatically copies your plan file from `~/.claude/plans/` to your project root as `plan-{slug}.md`.
-
-### Manual Export
-
-Export all plans from the current project:
+### Usage
 
 ```
-/export-project-plans
+┌─────────────────┐     ┌──────────────┐     ┌──────────────┐     ┌────────────────┐
+│  1. Plan Mode   │────▶│ 2. Press ESC │────▶│ 3. /clear or │────▶│ 4. plan-{slug} │
+│                 │     │              │     │    /new      │     │    .md saved!  │
+└─────────────────┘     └──────────────┘     └──────────────┘     └────────────────┘
 ```
 
-This scans all session transcripts and exports any associated plan files.
+1. Plan with any model in Plan Mode
+2. Press **ESC** when asked to choose auto-accept/manual
+3. Start new session (`/clear`, `/reset`, or `/new`)
+4. Plan exported to `plan-{slug}.md`
 
-Export all plans with timestamps:
+Then run `/execute-plan` to execute with your preferred model.
 
-```
-/export-project-plans-with-timestamp
-```
+## Commands
 
-This exports plans with the source file's last modified time prepended: `YYYYMMDD-HHMMSS-plan-{slug}.md`
-
-### Execute Plan
-
-Execute the most recent plan in the current directory:
-
-```
-/execute-plan
-```
-
-This finds the most recently modified `*plan-*.md` file and executes it.
+| Command | Description | Output |
+|---------|-------------|--------|
+| `/execute-plan` | Execute most recent plan | Runs `*plan-*.md` in CWD |
+| `/export-project-plans` | Export all project plans | Root (1) or `plans/` (2+) |
+| `/export-project-plans-with-timestamp` | Export with timestamps | `YYYYMMDD-HHMMSS-plan-{slug}.md` |
 
 ## How It Works
 
-1. Plan with Opus or any model in Plan Mode as usual
-2. When it asks you to choose auto-accept or manual approval, press **Esc**
-3. Start a new session (`/clear`, `/reset`, or `/new`)
-4. Your plan is automatically exported to your current working directory as `plan-{original_uid}.md`
+```
+SessionStart Hook              SessionEnd Hook
+      │                              │
+      ▼                              ▼
+┌────────────────┐           ┌────────────────┐
+│session_start.py│           │ export_plan.py │
+│                │           │                │
+│ Saves          │  ──────▶  │ Reads transcript│
+│ TRANSCRIPT_DIR │  session  │ Finds slug     │
+│ to env file    │           │ Copies plan    │
+└────────────────┘           └────────────────┘
+```
 
-From there, you can execute the plan with whatever model you prefer.
+**Key paths:**
+- Source: `~/.claude/plans/{slug}.md`
+- Destination: `{CWD}/plan-{slug}.md`
+
+## Folder Organization
+
+```
+1 plan found?  ──▶  Export to project root: plan-{slug}.md
+2+ plans found? ──▶  Export to plans/ folder: plans/plan-{slug}.md
+```
 
 ## Project Structure
 
@@ -95,40 +91,27 @@ scripts/
   export_project_plans.py
   export_project_plans_with_timestamp.py
 commands/
+  execute-plan.md
   export-project-plans.md
   export-project-plans-with-timestamp.md
-  execute-plan.md
+tests/
+  test_export_plan.py
+  test_export_project_plans.py
+  test_concurrency.py
+  test_session_start.py
 ```
 
 ## Development
 
 ```bash
-# Option 1: Using just (Recommended)
-# Install dependencies and setup hooks
-just setup
+# Setup
+just setup          # Or: uv sync && uv run pre-commit install
 
-# Run all checks (tests, lint, type check, dead code)
-just check
-
-# Option 2: Manual commands
-# Install dependencies
-uv sync
-
-# Setup pre-commit hooks
-uv run pre-commit install
-
-# Run tests
+# Test
 uv run pytest
 
-# Run linter
-uv run ruff check
-
-# Run type checker
-uv run mypy .
-
-# Run dead code detection
-uv run vulture
-
+# Lint
+just check          # Or: uv run ruff check && uv run mypy .
 ```
 
 ## License
