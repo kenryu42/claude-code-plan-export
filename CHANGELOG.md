@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.6 (2025-12-29)
+
+### Fix
+
+- Add cross-platform script execution compatibility
+
 ## v0.1.5 (2025-12-19)
 
 ### Refactor
