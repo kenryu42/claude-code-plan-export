@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "plan-export-dev",
+      "name": "plan-export",
       "description": "Auto-save your Claude Code plans to the project root when you finish planning.",
       "source": "./",
       "author": {
