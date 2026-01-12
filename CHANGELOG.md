@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.0 (2026-01-12)
+
+### Feat
+
+- lower minimum Python version to 3.9 and relax dependency   constraints
+
 ## v0.1.6 (2025-12-29)
 
 ### Fix
