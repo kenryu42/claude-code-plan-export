@@ -17,5 +17,7 @@ check:
 # Bump version and generate changelog
 bump:
     uv run cz bump
+    uv lock
+    git diff --quiet uv.lock || (git add uv.lock && git commit --amend --no-edit)
     git push --follow-tags
     gh release create $(git describe --tags --abbrev=0) --notes "$(uv run cz changelog $(git describe --tags --abbrev=0) --dry-run)"
