@@ -6,6 +6,8 @@ Reads session info from stdin (JSON), parses the transcript JSONL to find
 the plan slug, then copies the corresponding plan file.
 """
 
+from __future__ import annotations
+
 import json
 import shutil
 import sys
