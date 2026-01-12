@@ -1,8 +1,8 @@
 # Claude Code Plan Export
 
 [![Version](https://img.shields.io/badge/version-0.1.5-blue)](https://github.com/kenryu42/claude-code-plan-export)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-orange)](https://platform.claude.com/docs/en/agent-sdk/plugins)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D27656)](#installation)
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 
 Auto-export your Claude Code plans to the project root when you finish planning.
 
