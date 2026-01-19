@@ -1,10 +1,59 @@
 # Claude Code Plan Export
 
-[![Version](https://img.shields.io/badge/version-0.1.5-blue)](https://github.com/kenryu42/claude-code-plan-export)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D27656)](#installation)
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+> **DEPRECATED**: This plugin has been superseded by native Claude Code features.
+> See [Migration Guide](#migration-guide) below for instructions on switching to native settings.
+
+[![Deprecated](https://img.shields.io/badge/status-deprecated-red)](#migration-guide)
+[![Version](https://img.shields.io/github/v/tag/kenryu42/claude-code-plan-export?label=version&color=blue)](https://github.com/kenryu42/claude-code-plan-export)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Auto-export your Claude Code plans to the project root when you finish planning.
+
+## Deprecation Notice
+
+**This plugin is no longer maintained.** Claude Code now natively supports:
+
+- **`planDirectory` setting** - Configure where plans are saved directly in Claude Code settings
+- **Fresh context on plan execution** - Claude Code automatically clears context when executing a plan
+
+These native features replace all functionality provided by this plugin. Please migrate to the native settings.
+
+## Migration Guide
+
+### Step 1: Uninstall the Plugin
+
+```
+/plugin uninstall plan-export
+```
+
+### Step 2: Configure Native Plan Directory
+
+Add to your Claude Code settings (`.claude/settings.json` or via `/config`):
+
+```json
+{
+  "planDirectory": "./plans"
+}
+```
+
+Plans will now be saved directly to your configured directory.
+
+### Step 3: Use Native Plan Execution
+
+When you execute a plan, Claude Code now offer an option to start with a fresh context window. No need for manual `/clear` or `/new` commands.
+
+### Feature Comparison
+
+| This Plugin | Native Claude Code |
+|-------------|-------------------|
+| Session hooks to export plans | `planDirectory` setting |
+| `/execute-plan` + manual `/clear` | Plan execution auto-clears context |
+| `/export-project-plans` | Plans saved automatically |
+
+---
+
+<details>
+<summary><strong>Legacy Documentation</strong> (click to expand)</summary>
 
 ## Why Use This Plugin?
 
@@ -117,3 +166,5 @@ just check          # Or: uv run ruff check && uv run mypy .
 ## License
 
 MIT
+
+</details>
